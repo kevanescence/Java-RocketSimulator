@@ -1,6 +1,6 @@
 public class StateAndReward {
 
-	private final static int NBR_STATES = 9;
+	private final static int NBR_STATES = 7;
 	
 	/* State discretization function for the angle controller */
 	public static String getStateAngle(double angle, double vx, double vy) {
@@ -8,7 +8,7 @@ public class StateAndReward {
 		/* TODO: IMPLEMENT THIS FUNCTION */
 
 		String state = "OneStateToRuleThemAll";
-		state = Integer.toString(discretize(angle, NBR_STATES, -Math.PI, Math.PI));
+		state = Integer.toString(discretize2(angle, NBR_STATES, -Math.PI, Math.PI));
 		return state;
 	}
 
@@ -32,8 +32,9 @@ public class StateAndReward {
 
 		/* TODO: IMPLEMENT THIS FUNCTION */
 
-		String state = "OneStateToRuleThemAll2";
-		
+		String state = getStateAngle(angle, vx, vy);
+		state += "-" + Integer.toString(discretize(vx, 3, -0.1, 0.1));
+		state += "-" + Integer.toString(discretize(vy, 3, -0.1, 0.1));
 		return state;
 	}
 
@@ -43,7 +44,13 @@ public class StateAndReward {
 		/* TODO: IMPLEMENT THIS FUNCTION */
 		
 		double reward = 0;
-
+		String test = ""+NBR_STATES/2+"-1-1";
+		if(getStateHover(angle, vx, vy).substring(0, 1).equals(test.substring(0, 1)))			
+			reward = 1;
+		if(getStateHover(angle, vx, vy).substring(0, 3).equals(test.substring(0, 3)))			
+			reward = 10;	
+		if(getStateHover(angle, vx, vy).equals(test))			
+			reward = 100;			
 		return reward;
 	}
 
