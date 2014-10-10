@@ -33,8 +33,8 @@ public class StateAndReward {
 		/* TODO: IMPLEMENT THIS FUNCTION */
 
 		String state = getStateAngle(angle, vx, vy);
-		state += "-" + Integer.toString(discretize(vx, 3, -0.1, 0.1));
-		state += "-" + Integer.toString(discretize(vy, 3, -0.1, 0.1));
+		state += "-" + Integer.toString(discretize(vx, 3, -0.5, 0.5));
+		state += "-" + Integer.toString(discretize(vy, 3, 0, 0.5));
 		return state;
 	}
 
@@ -47,10 +47,18 @@ public class StateAndReward {
 		String test = ""+NBR_STATES/2+"-1-1";
 		if(getStateHover(angle, vx, vy).substring(0, 1).equals(test.substring(0, 1)))			
 			reward = 1;
-		if(getStateHover(angle, vx, vy).substring(0, 3).equals(test.substring(0, 3)))			
-			reward = 10;	
-		if(getStateHover(angle, vx, vy).equals(test))			
-			reward = 100;			
+		if(getStateHover(angle, vx, vy).substring(0, 3).equals(test.substring(0, 3)) && Integer.parseInt(getStateHover(angle, vx, vy).substring(4))<2)			
+			reward = 2;	
+		if(getStateHover(angle, vx, vy).equals(test))	
+			reward = 5;
+		/*if(!getStateHover(angle, vx, vy).substring(2, 3).equals("1"))
+			reward = -1;*/
+		if(Integer.parseInt(getStateAngle(angle, vx, vy))<1 || Integer.parseInt(getStateAngle(angle, vx, vy))>NBR_STATES-2)
+			reward = -1;
+		if(Integer.parseInt(getStateHover(angle, vx, vy).substring(4))==2)
+			reward = -3;
+		if(!getStateHover(angle, vx, vy).substring(2).equals("1") && !getStateHover(angle, vx, vy).substring(4).equals("1") && Integer.parseInt(getStateAngle(angle, vx, vy))<1 || Integer.parseInt(getStateAngle(angle, vx, vy))>NBR_STATES-2)
+			reward = -6;
 		return reward;
 	}
 

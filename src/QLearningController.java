@@ -32,6 +32,7 @@ public class QLearningController extends Controller {
 	double previous_vy = 0;
 	double previous_angle = 0;
 	int previous_action = 0; 
+	double learn = 70;
 	
 	/* The tables used by Q-learning */
 	Hashtable<String, Double> Qtable = new Hashtable<String, Double>(); /* Contains the Q-values - the state-action utilities */
@@ -114,8 +115,12 @@ public class QLearningController extends Controller {
 	public void tick(int currentTime) {
 		iteration++;
 		
+		//System.out.println(StateAndReward.getRewardHover(angle.getValue(),vx.getValue(),vy.getValue()));
+		
 		if (!paused) {
 			String new_state = StateAndReward.getStateHover(angle.getValue(), vx.getValue(), vy.getValue());
+			
+			learn+=0.00001;
 
 			/* Repeat the chosen action for a while, hoping to reach a new state. This is a trick to speed up learning on this problem. */
 			action_counter++;
@@ -145,7 +150,7 @@ public class QLearningController extends Controller {
 				/* TODO: IMPLEMENT Q-UPDATE HERE! */
 				double tmp = Qtable.get(prev_stateaction);
 				double learnedValue =	StateAndReward.getRewardHover(angle.getValue(), vx.getValue(), vy.getValue()) + GAMMA_DISCOUNT_FACTOR *  getMaxActionQValue(new_state) - tmp; 
-				tmp += alpha(90)*learnedValue;
+				tmp += alpha((int)learn)*learnedValue;
 				
 				
 				Qtable.put(prev_stateaction, tmp);
